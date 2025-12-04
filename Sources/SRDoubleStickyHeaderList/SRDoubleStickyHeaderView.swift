@@ -87,11 +87,11 @@ fileprivate struct AboveViewContainer<AboveView: View>: View {
             .frame(maxWidth: .infinity, maxHeight: .infinity)
             .background(
                 GeometryReader { geo in
-                    Color.clear.preference(key: ViewHeightKey2.self,
+                    Color.clear.preference(key: ViewHeightKey.self,
                                            value: geo.size.height)
                 }
             )
-            .onPreferenceChange(ViewHeightKey2.self) { height in
+            .onPreferenceChange(ViewHeightKey.self) { height in
                 naturalHeight = height
             }
             .frame(height: max(naturalHeight - viewModel.offset, 0))
