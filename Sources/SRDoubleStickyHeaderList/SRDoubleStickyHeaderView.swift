@@ -60,17 +60,18 @@ fileprivate struct AboveViewContainer<AboveView: View>: View {
     
     var body: some View {
         aboveView
+            .frame(maxWidth: .infinity, maxHeight: .infinity)
             .background(
                 GeometryReader { geo in
-                    Color.clear.preference(key: ViewHeightKey.self,
+                    Color.clear.preference(key: ViewHeightKey2.self,
                                            value: geo.size.height)
                 }
             )
-            .onPreferenceChange(ViewHeightKey.self) { height in
+            .onPreferenceChange(ViewHeightKey2.self) { height in
                 naturalHeight = height
             }
-            .frame(maxWidth: .infinity)
-            .frame(height: max(naturalHeight - viewModel.offset, 1))
+            .frame(height: max(naturalHeight - viewModel.offset, 0))
+            .clipped()
     }
 }
 
