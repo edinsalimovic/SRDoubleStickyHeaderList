@@ -16,15 +16,12 @@ struct ContentView: View {
     
     var body: some View {
         SRDoubleStickyHeaderList(
-            headerHeight: 50,
-            subHeaderHeight: 50,
             aboveView: viewAboveList,
             headers: headers,
             stickyHeader: stickyHeader,
             headerView: headerView,
             subHeaderView: subHeaderView,
-            rowView: rowView,
-            onChangeScrollOffset: onChangeScrollOffset)
+            rowView: rowView)
     }
     
     private var headers: [any SRHeaderViewModel] {
@@ -156,13 +153,13 @@ struct ContentView: View {
 struct Sport: SRHeaderViewModel {
     let uniqueId: String
     let name: String
-    let subHeaders: [any SRDoubleStickyHeaderList.SRSubHeaderViewModel]
+    let subHeaders: [any SRSubHeaderViewModel]
 }
 
 struct Tournament: SRSubHeaderViewModel {
     let uniqueId: String
     let name: String
-    let rows: [any SRDoubleStickyHeaderList.SRRowViewModel]
+    let rows: [any SRRowViewModel]
 }
 
 struct Event: SRRowViewModel {
