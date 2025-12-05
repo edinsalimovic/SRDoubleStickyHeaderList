@@ -6,7 +6,7 @@ import PackageDescription
 let package = Package(
     name: "SRDoubleStickyHeaderList",
     platforms: [
-        .iOS(.v18)
+        .iOS(.v17)
     ],
     products: [
         .library(
@@ -14,15 +14,9 @@ let package = Package(
             targets: ["SRDoubleStickyHeaderList"]
         ),
     ],
-    dependencies: [
-        .package(url: "https://github.com/siteline/swiftui-introspect", from: "26.0.0"),
-    ],
     targets: [
         .target(
-            name: "SRDoubleStickyHeaderList",
-            dependencies: [
-                .product(name: "SwiftUIIntrospect", package: "swiftui-introspect")
-            ]
+            name: "SRDoubleStickyHeaderList"
         ),
     ]
 )
