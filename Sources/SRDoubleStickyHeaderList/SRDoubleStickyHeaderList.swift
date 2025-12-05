@@ -34,8 +34,6 @@ public struct SRDoubleStickyHeaderList<
     
     // MARK: Properties
     
-    let headerHeight: CGFloat
-    let subHeaderHeight: CGFloat
     let aboveView: AboveView
     let headers: [any SRHeaderViewModel]
     let stickyHeader: (_ header: any SRHeaderViewModel, _ subHeader: any SRSubHeaderViewModel) -> StickyHeader
@@ -52,19 +50,16 @@ public struct SRDoubleStickyHeaderList<
     private let movementDetectionThreshold: CGFloat = 0.5
     private let firstHeaderId: String
     private let firstSubHeaderId: String
+    @State private var stickyHeaderHeight: CGFloat = 0
     
     // MARK: Init
     
-    public init(headerHeight: CGFloat,
-                subHeaderHeight: CGFloat,
-                aboveView: AboveView,
+    public init(aboveView: AboveView,
                 headers: [any SRHeaderViewModel],
                 stickyHeader: @escaping (_: any SRHeaderViewModel, _: any SRSubHeaderViewModel) -> StickyHeader,
                 headerView: @escaping (_: any SRHeaderViewModel) -> HeaderContent,
                 subHeaderView: @escaping (_: any SRSubHeaderViewModel) -> SubHeaderContent,
                 rowView: @escaping (_: any SRRowViewModel) -> RowContent) {
-        self.headerHeight = headerHeight
-        self.subHeaderHeight = subHeaderHeight
         self.aboveView = aboveView
         self.headers = headers
         self.stickyHeader = stickyHeader
@@ -109,6 +104,17 @@ public struct SRDoubleStickyHeaderList<
                 } header: {
                     stickyHeader(currentHeader, currentSubHeader)
                         .asListStyleless
+                        .background(
+                            GeometryReader { geo in
+                                Color.clear
+                                    .onAppear {
+                                        stickyHeaderHeight = geo.size.height
+                                    }
+                                    .onChange(of: geo.size.height) { newHeight in
+                                        stickyHeaderHeight = newHeight
+                                    }
+                            }
+                        )
                 }
             }
             .onChange(of: firstHeaderId) { _, newValue in
@@ -157,7 +163,7 @@ public struct SRDoubleStickyHeaderList<
         previousRelativeBottoms = previousRelativeBottoms.filter { itemPositions[$0.key] != nil }
         for (id, position) in itemPositions {
             guard let (hIndex, sIndex) = findIndexes(subHeaderID: id) else { continue }
-            let relativeBottomAtOverlay = position.bottom - (headerHeight + subHeaderHeight) - detectionTolerance
+            let relativeBottomAtOverlay = position.bottom - stickyHeaderHeight - detectionTolerance
             let previousRelative = previousRelativeBottoms[id]
             let crossedOverlayBoundary: Bool
             var inferredScrollingDown = isScrollingDown
