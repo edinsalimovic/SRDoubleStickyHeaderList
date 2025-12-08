@@ -1,0 +1,100 @@
+//
+//  Models+Data.swift
+//  Example
+//
+//  Created by Edin Salimovic on 8. 12. 2025..
+//
+
+import SRDoubleStickyHeaderList
+
+struct Sport: SRHeaderViewModel {
+    let uniqueId: String
+    let name: String
+    let subHeaders: [any SRSubHeaderViewModel]
+}
+
+struct Tournament: SRSubHeaderViewModel {
+    let uniqueId: String
+    let name: String
+    let rows: [any SRRowViewModel]
+}
+
+struct Event: SRRowViewModel {
+    let uniqueId: String
+    let name: String
+}
+
+var headers: [any SRHeaderViewModel] {
+    [Sport(uniqueId: "sport_football", name: "Football",
+           subHeaders: [
+            Tournament(
+                uniqueId: "tournament_premierleague",
+                name: "Premier League",
+                rows: [
+                    Event(uniqueId: "event_arsenal_manutd", name: "Arsenal vs Manchester United"),
+                    Event(uniqueId: "event_liverpool_chelsea", name: "Liverpool vs Chelsea"),
+                    Event(uniqueId: "event_city_spurs", name: "Manchester City vs Tottenham")
+                ]
+            ),
+            Tournament(
+                uniqueId: "tournament_championsleague",
+                name: "UEFA Champions League",
+                rows: [
+                    Event(uniqueId: "event_real_bayern", name: "Real Madrid vs Bayern Munich"),
+                    Event(uniqueId: "event_barca_psg", name: "Barcelona vs PSG")
+                ]
+            ),
+            Tournament(
+                uniqueId: "tournament_la_liga",
+                name: "La Liga",
+                rows: [
+                    Event(uniqueId: "event_atletico_valencia", name: "Atlético Madrid vs Valencia"),
+                    Event(uniqueId: "event_sevilla_betis", name: "Sevilla vs Real Betis"),
+                    Event(uniqueId: "event_real_sociedad_villarreal", name: "Real Sociedad vs Villarreal")
+                ])]),
+     Sport(uniqueId: "sport_basketball", name: "Basketball",
+           subHeaders: [
+            Tournament(
+                uniqueId: "tournament_nba",
+                name: "NBA",
+                rows: [
+                    Event(uniqueId: "event_lakers_warriors", name: "Los Angeles Lakers vs Golden State Warriors"),
+                    Event(uniqueId: "event_celtics_heat", name: "Boston Celtics vs Miami Heat")
+                ]
+            ),
+            Tournament(
+                uniqueId: "tournament_euroleague",
+                name: "EuroLeague",
+                rows: [
+                    Event(uniqueId: "event_fenerbahce_olympiacos", name: "Fenerbahçe vs Olympiacos"),
+                    Event(uniqueId: "event_barca_maccabi", name: "Barcelona vs Maccabi Tel Aviv"),
+                    Event(uniqueId: "event_milan_real", name: "Olimpia Milano vs Real Madrid")
+                ])]),
+     Sport(uniqueId: "sport_tennis", name: "Tennis",
+           subHeaders: [
+            Tournament(
+                uniqueId: "tournament_wimbledon",
+                name: "Wimbledon",
+                rows: [
+                    Event(uniqueId: "event_djokovic_alcaraz", name: "Novak Djokovic vs Carlos Alcaraz"),
+                    Event(uniqueId: "event_sinner_medvedev", name: "Jannik Sinner vs Daniil Medvedev")
+                ]
+            ),
+            Tournament(
+                uniqueId: "tournament_usopen",
+                name: "US Open",
+                rows: [
+                    Event(uniqueId: "event_swiatek_gaff", name: "Iga Świątek vs Coco Gauff"),
+                    Event(uniqueId: "event_sabalenka_rybakina", name: "Aryna Sabalenka vs Elena Rybakina"),
+                    Event(uniqueId: "event_zverev_tiafoe", name: "Alexander Zverev vs Frances Tiafoe")
+                ]
+            ),
+            Tournament(
+                uniqueId: "tournament_australian",
+                name: "Australian Open",
+                rows: [
+                    Event(uniqueId: "event_fritz_rune", name: "Taylor Fritz vs Holger Rune"),
+                    Event(uniqueId: "event_osaka_badosa", name: "Naomi Osaka vs Paula Badosa")
+                ])])
+    ]
+}

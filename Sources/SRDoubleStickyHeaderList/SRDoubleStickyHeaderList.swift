@@ -40,6 +40,7 @@ public struct SRDoubleStickyHeaderList<
     let headerView: (_ header: any SRHeaderViewModel) -> HeaderContent
     let subHeaderView: (_ subHeader: any SRSubHeaderViewModel) -> SubHeaderContent
     let rowView: (_ row: any SRRowViewModel) -> RowContent
+    let loadMoreView: AnyView?
     @State private var itemPositions: [String: ItemPosition] = [:]
     @State private var currentHeader: any SRHeaderViewModel
     @State private var currentSubHeader: any SRSubHeaderViewModel
@@ -59,13 +60,15 @@ public struct SRDoubleStickyHeaderList<
                 stickyHeader: @escaping (_: any SRHeaderViewModel, _: any SRSubHeaderViewModel) -> StickyHeader,
                 headerView: @escaping (_: any SRHeaderViewModel) -> HeaderContent,
                 subHeaderView: @escaping (_: any SRSubHeaderViewModel) -> SubHeaderContent,
-                rowView: @escaping (_: any SRRowViewModel) -> RowContent) {
+                rowView: @escaping (_: any SRRowViewModel) -> RowContent,
+                loadMoreView: AnyView? = nil) {
         self.aboveView = aboveView
         self.headers = headers
         self.stickyHeader = stickyHeader
         self.headerView = headerView
         self.subHeaderView = subHeaderView
         self.rowView = rowView
+        self.loadMoreView = loadMoreView
         _currentHeader = State(wrappedValue: headers.first!)
         _currentSubHeader = State(wrappedValue: headers.first!.subHeaders.first!)
         firstHeaderId = headers.first!.uniqueId
@@ -110,12 +113,13 @@ public struct SRDoubleStickyHeaderList<
                                     .onAppear {
                                         stickyHeaderHeight = geo.size.height
                                     }
-                                    .onChange(of: geo.size.height) { newHeight in
+                                    .onChange(of: geo.size.height) { _, newHeight in
                                         stickyHeaderHeight = newHeight
                                     }
                             }
                         )
                 }
+                loadMoreView
             }
             .onChange(of: firstHeaderId) { _, newValue in
                 if let header = headers.first(where: { $0.uniqueId == newValue }) {
