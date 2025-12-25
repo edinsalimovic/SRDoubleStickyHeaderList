@@ -18,7 +18,8 @@ struct ContentView: View {
             headerView: headerView,
             subHeaderView: subHeaderView,
             rowView: rowView,
-            loadMoreView: loadMoreView)
+            loadMoreView: loadMoreView,
+            emptyStateView: AnyView(Text("No data")))
     }
     
     private var viewAboveList: some View {

@@ -41,16 +41,17 @@ public struct SRDoubleStickyHeaderList<
     let subHeaderView: (_ subHeader: any SRSubHeaderViewModel) -> SubHeaderContent
     let rowView: (_ row: any SRRowViewModel) -> RowContent
     let loadMoreView: AnyView?
+    let emptyStateView: AnyView?
     @State private var itemPositions: [String: ItemPosition] = [:]
-    @State private var currentHeader: any SRHeaderViewModel
-    @State private var currentSubHeader: any SRSubHeaderViewModel
+    @State private var currentHeader: (any SRHeaderViewModel)?
+    @State private var currentSubHeader: (any SRSubHeaderViewModel)?
     @State private var previousRelativeBottoms: [String: CGFloat] = [:]
     @State private var overlayBottomGlobalY: CGFloat = 0
     @State private var isScrollingDown: Bool = true
     private let detectionTolerance: CGFloat = 2
     private let movementDetectionThreshold: CGFloat = 0.5
-    private let firstHeaderId: String
-    private let firstSubHeaderId: String
+    private let firstHeaderId: String?
+    private let firstSubHeaderId: String?
     @State private var stickyHeaderHeight: CGFloat = 0
     
     // MARK: Init
@@ -61,7 +62,8 @@ public struct SRDoubleStickyHeaderList<
                 headerView: @escaping (_: any SRHeaderViewModel) -> HeaderContent,
                 subHeaderView: @escaping (_: any SRSubHeaderViewModel) -> SubHeaderContent,
                 rowView: @escaping (_: any SRRowViewModel) -> RowContent,
-                loadMoreView: AnyView? = nil) {
+                loadMoreView: AnyView? = nil,
+                emptyStateView: AnyView? = nil) {
         self.aboveView = aboveView
         self.headers = headers
         self.stickyHeader = stickyHeader
@@ -69,10 +71,11 @@ public struct SRDoubleStickyHeaderList<
         self.subHeaderView = subHeaderView
         self.rowView = rowView
         self.loadMoreView = loadMoreView
-        _currentHeader = State(wrappedValue: headers.first!)
-        _currentSubHeader = State(wrappedValue: headers.first!.subHeaders.first!)
-        firstHeaderId = headers.first!.uniqueId
-        firstSubHeaderId = headers.first!.subHeaders.first!.uniqueId
+        self.emptyStateView = emptyStateView
+        _currentHeader = State(wrappedValue: headers.first)
+        _currentSubHeader = State(wrappedValue: headers.first?.subHeaders.first)
+        firstHeaderId = headers.first?.uniqueId
+        firstSubHeaderId = headers.first?.subHeaders.first?.uniqueId
     }
     
     // MARK: Body
@@ -81,45 +84,7 @@ public struct SRDoubleStickyHeaderList<
         GeometryReader { containerGeo in
             List {
                 aboveView.asListStyleless
-                Section {
-                    ForEach(headers, id: \.uniqueId) { header in
-                        if firstHeaderId == header.uniqueId {
-                            EmptyView()
-                        } else {
-                            headerView(header)
-                                .asListStyleless
-                        }
-                        
-                        ForEach(header.subHeaders, id: \.uniqueId) { subHeader in
-                            if firstSubHeaderId == subHeader.uniqueId {
-                                EmptyView()
-                            } else {
-                                subHeaderView(subHeader)
-                                    .asListStyleless
-                                    .trackPosition(id: subHeader.uniqueId)
-                            }
-                            ForEach(subHeader.rows, id: \.uniqueId) { row in
-                                rowView(row)
-                                    .asListStyleless
-                            }
-                        }
-                    }
-                } header: {
-                    stickyHeader(currentHeader, currentSubHeader)
-                        .asListStyleless
-                        .background(
-                            GeometryReader { geo in
-                                Color.clear
-                                    .onAppear {
-                                        stickyHeaderHeight = geo.size.height
-                                    }
-                                    .onChange(of: geo.size.height) { _, newHeight in
-                                        stickyHeaderHeight = newHeight
-                                    }
-                            }
-                        )
-                }
-                loadMoreView
+                sectionsContentView
             }
             .onChange(of: firstHeaderId) { _, newValue in
                 if let header = headers.first(where: { $0.uniqueId == newValue }) {
@@ -241,6 +206,59 @@ public struct SRDoubleStickyHeaderList<
             }
         }
         return (nil, nil)
+    }
+}
+
+// MARK: Views
+
+extension SRDoubleStickyHeaderList {
+    
+    @ViewBuilder
+    private var sectionsContentView: some View {
+        if !headers.isEmpty {
+            Section {
+                ForEach(headers, id: \.uniqueId) { header in
+                    if firstHeaderId == header.uniqueId {
+                        EmptyView()
+                    } else {
+                        headerView(header)
+                            .asListStyleless
+                    }
+                    
+                    ForEach(header.subHeaders, id: \.uniqueId) { subHeader in
+                        if firstSubHeaderId == subHeader.uniqueId {
+                            EmptyView()
+                        } else {
+                            subHeaderView(subHeader)
+                                .asListStyleless
+                                .trackPosition(id: subHeader.uniqueId)
+                        }
+                        ForEach(subHeader.rows, id: \.uniqueId) { row in
+                            rowView(row)
+                                .asListStyleless
+                        }
+                    }
+                }
+            } header: {
+                if let currentHeader, let currentSubHeader {
+                    stickyHeader(currentHeader, currentSubHeader)
+                        .asListStyleless
+                        .background(
+                            GeometryReader { geo in
+                                Color.clear
+                                    .onAppear {
+                                        stickyHeaderHeight = geo.size.height
+                                    }
+                                    .onChange(of: geo.size.height) { _, newHeight in
+                                        stickyHeaderHeight = newHeight
+                                    }
+                            })
+                }
+            }
+            loadMoreView
+        } else {
+            emptyStateView
+        }
     }
 }
 

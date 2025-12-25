@@ -7,7 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		DCF6EC672EE6DEB80006184C /* SRDoubleStickyHeaderList in Frameworks */ = {isa = PBXBuildFile; productRef = DCF6EC662EE6DEB80006184C /* SRDoubleStickyHeaderList */; };
+		DCB753CA2EFD283C00653448 /* SRDoubleStickyHeaderList in Frameworks */ = {isa = PBXBuildFile; productRef = DCB753C92EFD283C00653448 /* SRDoubleStickyHeaderList */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -27,7 +27,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				DCF6EC672EE6DEB80006184C /* SRDoubleStickyHeaderList in Frameworks */,
+				DCB753CA2EFD283C00653448 /* SRDoubleStickyHeaderList in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -70,7 +70,7 @@
 			);
 			name = Example;
 			packageProductDependencies = (
-				DCF6EC662EE6DEB80006184C /* SRDoubleStickyHeaderList */,
+				DCB753C92EFD283C00653448 /* SRDoubleStickyHeaderList */,
 			);
 			productName = Example;
 			productReference = DCF6EC572EE6DE640006184C /* Example.app */;
@@ -101,7 +101,7 @@
 			mainGroup = DCF6EC4E2EE6DE630006184C;
 			minimizedProjectReferenceProxies = 1;
 			packageReferences = (
-				DCF6EC652EE6DEB80006184C /* XCLocalSwiftPackageReference "../../SRDoubleStickyHeaderList" */,
+				DCB753C82EFD283C00653448 /* XCLocalSwiftPackageReference "../../SRDoubleStickyHeaderList" */,
 			);
 			preferredProjectObjectVersion = 77;
 			productRefGroup = DCF6EC582EE6DE640006184C /* Products */;
@@ -343,14 +343,14 @@
 /* End XCConfigurationList section */
 
 /* Begin XCLocalSwiftPackageReference section */
-		DCF6EC652EE6DEB80006184C /* XCLocalSwiftPackageReference "../../SRDoubleStickyHeaderList" */ = {
+		DCB753C82EFD283C00653448 /* XCLocalSwiftPackageReference "../../SRDoubleStickyHeaderList" */ = {
 			isa = XCLocalSwiftPackageReference;
 			relativePath = ../../SRDoubleStickyHeaderList;
 		};
 /* End XCLocalSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
-		DCF6EC662EE6DEB80006184C /* SRDoubleStickyHeaderList */ = {
+		DCB753C92EFD283C00653448 /* SRDoubleStickyHeaderList */ = {
 			isa = XCSwiftPackageProductDependency;
 			productName = SRDoubleStickyHeaderList;
 		};
